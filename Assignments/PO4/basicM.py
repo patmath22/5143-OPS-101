@@ -1,3 +1,21 @@
+from urllib.request import urlopen
+import requests
+import json
+
+
+# one way of accessing API
+
+# data=urlopen('http://sendmessage.live:8001/grayscale?num=10').read()
+# stuff = json.loads(data.decode('utf-8'))
+
+# A different way of (T gave)
+
+# r=requests.get('http://sendmessage.live:8001/grayscale?num=10')
+# stuff = r.json()
+# print(stuff)
+
+#Api down so stuff is test data
+
 stuff=[[
     'LOAD R1 406',
     'LOAD R2 230',
@@ -27,10 +45,22 @@ stuff=[[
 # print(len(stuff))
 # print(stuff[0][0].split())
 
-def writereg(loc,val):
-    RegD[loc]=val
 
-RegD={"R1":0,"R2":0,"R3":0,"R4":0,"R5":0,"R6":0}
+
+
+
+def buildRegisters(num=10):
+    registers = {}
+
+    for i in range(num):
+        registers[f"R{i}"] = 0
+    return registers
+
+
+RegD=buildRegisters(10)
+
+def writereg(loc,val):
+    RegD[loc]=val 
 
 for i in stuff:
     for t in range(len(stuff[0])):
@@ -61,14 +91,22 @@ for i in stuff:
             xy3=xy2.split(',')
             # print("this is x ",xy3[0])
             # print("this is y ",xy3[1])
-            print(f'"STORE" : [{RegD[rgb3[0]]},{RegD[rgb3[1]]},{RegD[rgb3[2]]}],"xy": [ {RegD[xy3[0]]},{RegD[xy3[1]]} ]   ')
+            #print(f'"STORE" : [{RegD[rgb3[0]]},{RegD[rgb3[1]]},{RegD[rgb3[2]]}],"xy": [ {RegD[xy3[0]]},{RegD[xy3[1]]} ]   ')
             #print(RegD[rgb3[0]])
+            sback={"rgb":[RegD[rgb3[0]],RegD[rgb3[1]],RegD[rgb3[2]]],"xy":[ RegD[xy3[0]],RegD[xy3[1]] ]}
+            print(sback)
         
             
         
    
-    print(RegD)
-    print("/n") 
+    # print(RegD)
+    # print("/n") 
+
+#data = json.loads(data.decode('utf-8'))
+
+# print(data)
+# print("\n")
+# print(data[0])
 
 # Regs=[0,0,0,0,0,0]
 # print(Regs)
